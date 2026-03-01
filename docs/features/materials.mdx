@@ -1,15 +1,19 @@
 ---
 title: "Materials & Files"
-description: "Upload reference files and images to enrich your slides"
+description: "Upload reference files and images, or generate custom materials with AI"
 ---
 
-## Supported File Formats
+## Reference Files
+
+Upload existing documents as source material. AI extracts the content and references it when generating slides.
+
+### Supported File Formats
 
 | Format | Description |
 |--------|-------------|
 | PDF | Extracts text and embedded images |
 | DOCX / DOC | Parses document content and structure |
-| PPTX / PPT | Extracts slides content |
+| PPTX / PPT | Extracts slide content |
 | XLSX / XLS / CSV | Parses spreadsheet data |
 | Markdown | Reads formatted text and image links |
 | TXT | Plain text content |
@@ -18,16 +22,36 @@ description: "Upload reference files and images to enrich your slides"
   PDF parsing uses [MinerU](https://mineru.net) for high-quality content extraction. See [Configuration](/configuration#mineru-pdf-parsing) to set up your MinerU token.
 </Tip>
 
-## How Materials Work
+### Upload Methods
 
-1. Upload files on the Home page or in the Detail Editor
-2. The backend parses and extracts key content, images, and chart information
-3. Extracted content is used as context when generating slide descriptions and images
+- **Click to select** — Click the paperclip icon on the home page or in the Detail Editor
+- **Drag and drop** — Drag files directly into the input area
+- **Paste** — Paste files from clipboard (Ctrl+V)
+- **Material Center** — Click **Material Center** to select from previously uploaded files
+
+### How Materials Work
+
+1. After uploading, the backend automatically parses and extracts key content, images, and chart information
+2. Extracted content is used as context when generating slide descriptions and images
+3. Files show a "Parsing" status while processing — they become available once parsing is complete
 
 ## Image Pasting
 
-You can paste images directly into the Home page, Outline Editor, or Description Cards. The system will recognize and incorporate them immediately.
+Paste images directly (Ctrl+V) into the home page, Outline Editor, or Description Cards. The system recognizes the image content and inserts it as a Markdown image reference at the cursor position.
 
 ## Style References
 
-Upload reference images or templates to guide the visual style of your entire presentation. The AI will match the color scheme, layout patterns, and design language of your references.
+Upload reference images or templates to guide the visual style of your entire presentation. AI will match the color scheme, layout patterns, and design language of your references.
+
+## Material Generator
+
+Click **Generate Material** in the top navigation bar to create custom AI-generated images:
+
+1. Describe the image you want
+2. Select an aspect ratio (16:9, 1:1, 9:16, etc.)
+3. Generated images are automatically saved to the material library
+4. Use **Select from Material Library** when editing slides to reuse them
+
+## Material Center
+
+The **Material Center** collects all generated or uploaded materials. You can access it when creating a new project or editing an existing one to reuse files without re-uploading.

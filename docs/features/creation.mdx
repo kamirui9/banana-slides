@@ -1,11 +1,11 @@
 ---
 title: "Creating Presentations"
-description: "Start from an idea, outline, or page descriptions"
+description: "Start from an idea, outline, descriptions, or an existing PPT"
 ---
 
 ## From an Idea
 
-The simplest way to get started. Enter a topic or sentence on the home page, and Banana Slides will:
+The simplest way to get started. Enter a topic on the home page, and Banana Slides will:
 
 1. Generate a structured outline with chapters
 2. Create detailed page descriptions for each slide
@@ -28,8 +28,37 @@ For maximum control, write detailed descriptions for each slide directly in the 
   Include specific text content in your descriptions for better text rendering quality on the generated slides.
 </Tip>
 
+## PPT Renovation
+
+Upload an existing PDF or PPTX file, and AI will parse the original content and regenerate a refreshed presentation:
+
+1. Select the **PPT Renovation** tab on the home page
+2. Upload a PDF or PPTX file (recommended: convert PPTX to PDF locally before uploading)
+3. Optionally check **Keep original layout** to guide AI to stay closer to the original structure
+4. After creating the project, AI automatically parses each page and generates descriptions, then produces new slide images
+
+<Note>
+  When uploading PPTX, the server uses LibreOffice for conversion, which may cause layout issues due to missing fonts. **Converting to PDF locally before uploading** gives more stable results.
+</Note>
+
+## Aspect Ratio
+
+Select an aspect ratio before creating a project on the home page. Supported ratios:
+
+| Ratio | Best for |
+|-------|---------|
+| 16:9 | Standard widescreen (default) |
+| 4:3 | Traditional slides |
+| 21:9 | Ultrawide displays |
+| 1:1 | Square (social media) |
+| 9:16 | Portrait (mobile) |
+| Others | 3:2, 5:4, 4:5, 2:3, 3:4 |
+
+The ratio can also be changed in Project Settings on the preview page. Images must be regenerated after changing the ratio.
+
 ## Style Customization
 
 - **Reference images** — Upload style reference images to guide the visual style
-- **Templates** — Use text-based style presets to control the look without images
+- **Templates** — Use text-based style presets to control the look
+- **Text style description** — Describe the desired visual style in natural language
 - **Per-page materials** — Attach specific images or charts to individual slides

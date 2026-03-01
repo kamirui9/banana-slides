@@ -7,33 +7,9 @@
     "light": "#FBBF24",
     "dark": "#D97706"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/logo/banana.svg",
   "navigation": {
     "languages": [
-      {
-        "language": "en",
-        "groups": [
-          {
-            "group": "Getting Started",
-            "pages": ["index", "quickstart", "configuration"]
-          },
-          {
-            "group": "Features",
-            "pages": [
-              "features/overview",
-              "features/creation",
-              "features/editing",
-              "features/materials",
-              "features/export",
-              "features/import-export"
-            ]
-          },
-          {
-            "group": "Support",
-            "pages": ["faq"]
-          }
-        ]
-      },
       {
         "language": "zh",
         "groups": [
@@ -55,6 +31,30 @@
           {
             "group": "支持",
             "pages": ["zh/faq"]
+          }
+        ]
+      },
+      {
+        "language": "en",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": ["index", "quickstart", "configuration"]
+          },
+          {
+            "group": "Features",
+            "pages": [
+              "features/overview",
+              "features/creation",
+              "features/editing",
+              "features/materials",
+              "features/export",
+              "features/import-export"
+            ]
+          },
+          {
+            "group": "Support",
+            "pages": ["faq"]
           }
         ]
       }
