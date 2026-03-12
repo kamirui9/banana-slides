@@ -118,6 +118,7 @@ interface ProjectState {
   generatePageDescription: (pageId: string, detailLevel?: string) => Promise<void>;
   regenerateRenovationPage: (pageId: string, keepLayout?: boolean) => Promise<void>;
   generateImages: (pageIds?: string[]) => Promise<void>;
+  generatePageImage: (pageId: string, forceRegenerate?: boolean) => Promise<void>;
   editPageImage: (
     pageId: string,
     editPrompt: string,
@@ -1176,6 +1177,47 @@ const debouncedUpdatePage = debounce(
 
     // 开始轮询（不 await，立即返回让 UI 继续响应）
     poll();
+  },
+
+  // 生成单页图片（异步）
+  generatePageImage: async (pageId, forceRegenerate = false) => {
+    const { currentProject, pageGeneratingTasks } = get();
+    if (!currentProject) return;
+
+    // 如果该页面正在生成，不重复提交
+    if (pageGeneratingTasks[pageId]) {
+      devLog(`[单页生成] 页面 ${pageId} 正在生成中，跳过重复请求`);
+      return;
+    }
+
+    set({ error: null });
+    try {
+      const response = await api.generatePageImage(currentProject.id, pageId, forceRegenerate);
+      const taskId = response.data?.task_id;
+
+      if (taskId) {
+        // 记录该页面的任务ID
+        set({
+          pageGeneratingTasks: { ...pageGeneratingTasks, [pageId]: taskId }
+        });
+
+        // 立即同步一次项目数据，以获取后端设置的'GENERATING'状态
+        await get().syncProject();
+
+        // 开始轮询（使用统一的轮询函数）
+        get().pollImageTask(taskId, [pageId]);
+      } else {
+        // 如果没有返回task_id，可能是同步接口，直接刷新
+        await get().syncProject();
+      }
+    } catch (error: any) {
+      // 清除该页面的任务记录
+      const { pageGeneratingTasks } = get();
+      const newTasks = { ...pageGeneratingTasks };
+      delete newTasks[pageId];
+      set({ pageGeneratingTasks: newTasks, error: normalizeErrorMessage(error.message || t('store.batchGenerateFailed')) });
+      throw error;
+    }
   },
 
   // 编辑页面图片（异步）

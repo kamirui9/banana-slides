@@ -17,7 +17,7 @@ export const DetailEditor: React.FC = () => {
     updatePageLocal,
     generateDescriptions,
     generatePageDescription,
-    pageDescriptionGeneratingTasks,
+    pageGeneratingTasks,
   } = useProjectStore();
   const { show, ToastContainer } = useToast();
   const { confirm, ConfirmDialog } = useConfirm();
@@ -148,7 +148,11 @@ export const DetailEditor: React.FC = () => {
               <span className="hidden sm:inline">返回</span>
             </Button>
             <div className="flex items-center gap-1.5 md:gap-2">
-              <span className="text-xl md:text-2xl">🎨</span>
+              <img
+                src="/ookoo.png"
+                alt="OoKoO Slides Logo"
+                className="h-7 md:h-8 w-auto object-contain"
+              />
               <span className="text-base md:text-xl font-bold">OoKoO Slides</span>
             </div>
             <span className="text-gray-400 hidden lg:inline">|</span>
@@ -263,7 +267,7 @@ export const DetailEditor: React.FC = () => {
                     index={index}
                     onUpdate={(data) => updatePageLocal(pageId, data)}
                     onRegenerate={() => handleRegeneratePage(pageId)}
-                    isGenerating={pageId ? !!pageDescriptionGeneratingTasks[pageId] : false}
+                    isGenerating={pageId ? !!pageGeneratingTasks[pageId] : false}
                     isAiRefining={isAiRefining}
                   />
                 );

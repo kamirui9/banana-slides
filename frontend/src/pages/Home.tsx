@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, FileText, FileEdit, ImagePlus, Paperclip, Palette, Lightbulb, Search, Settings } from 'lucide-react';
+import { Sparkles, FileText, FileEdit, Paperclip, Palette, Lightbulb, Search, Settings } from 'lucide-react';
 import { Button, Textarea, Card, useToast, MaterialGeneratorModal, ReferenceFileList, ReferenceFileSelector, FilePreviewModal, ImagePreviewList } from '@/components/shared';
+import { useT } from '@/hooks/useT';
 import { TemplateSelector, getTemplateFile } from '@/components/shared/TemplateSelector';
 import { listUserTemplates, type UserTemplate, uploadReferenceFile, type ReferenceFile, associateFileToProject, triggerFileParse, uploadMaterial, associateMaterialsToProject } from '@/api/endpoints';
 import { useProjectStore } from '@/store/useProjectStore';
-import { PRESET_STYLES } from '@/config/presetStyles';
+import { PRESET_STYLES, getPresetStyleWithTranslation } from '@/config/presetStyles';
+import { presetStylesI18n } from '@/config/presetStylesI18n';
 
 type CreationType = 'idea' | 'outline' | 'description';
 
@@ -13,6 +15,17 @@ export const Home: React.FC = () => {
   const navigate = useNavigate();
   const { initializeProject, isGlobalLoading } = useProjectStore();
   const { show, ToastContainer } = useToast();
+
+  // 创建扩展的翻译对象，包含预设风格的翻译
+  const homeI18n = {
+    zh: {
+      presetStyles: presetStylesI18n.zh,
+    },
+    en: {
+      presetStyles: presetStylesI18n.en,
+    },
+  };
+  const t = useT(homeI18n);
   
   const [activeTab, setActiveTab] = useState<CreationType>('idea');
   const [content, setContent] = useState('');
@@ -475,33 +488,14 @@ export const Home: React.FC = () => {
             </span>
           </div>
           <div className="flex items-center gap-2 md:gap-3">
-            {/* 桌面端：带文字的素材生成按钮 */}
             <Button
               variant="ghost"
               size="sm"
-              icon={<ImagePlus size={16} className="md:w-[18px] md:h-[18px]" />}
-              onClick={handleOpenMaterialModal}
-              className="hidden sm:inline-flex hover:bg-ookoo-100/60 hover:shadow-sm hover:scale-105 transition-all duration-200 font-medium"
-            >
-              <span className="hidden md:inline">素材生成</span>
-            </Button>
-            {/* 手机端：仅图标的素材生成按钮 */}
-            <Button
-              variant="ghost"
-              size="sm"
-              icon={<ImagePlus size={16} />}
-              onClick={handleOpenMaterialModal}
-              className="sm:hidden hover:bg-ookoo-100/60 hover:shadow-sm hover:scale-105 transition-all duration-200"
-              title="素材生成"
-            />
-            <Button 
-              variant="ghost" 
-              size="sm" 
               onClick={() => navigate('/history')}
               className="text-xs md:text-sm hover:bg-ookoo-100/60 hover:shadow-sm hover:scale-105 transition-all duration-200 font-medium"
             >
-              <span className="hidden sm:inline">历史项目</span>
-              <span className="sm:hidden">历史</span>
+              <span className="hidden sm:inline">我的PPT</span>
+              <span className="sm:hidden">PPT</span>
             </Button>
             <Button
               variant="ghost"
@@ -513,7 +507,6 @@ export const Home: React.FC = () => {
               <span className="hidden md:inline">设置</span>
               <span className="sm:hidden">设</span>
             </Button>
-            <Button variant="ghost" size="sm" className="hidden md:inline-flex hover:bg-ookoo-50/50">帮助</Button>
           </div>
         </div>
       </nav>
@@ -539,25 +532,6 @@ export const Home: React.FC = () => {
           <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto font-light">
             Vibe your PPT like vibing code
           </p>
-
-          {/* 特性标签 */}
-          <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 pt-4">
-            {[
-              { icon: <Sparkles size={14} className="text-yellow-600" />, label: '一句话生成 PPT' },
-              { icon: <FileEdit size={14} className="text-blue-500" />, label: '自然语言修改' },
-              { icon: <Search size={14} className="text-orange-500" />, label: '指定区域编辑' },
-              
-              { icon: <Paperclip size={14} className="text-green-600" />, label: '一键导出 PPTX/PDF' },
-            ].map((feature, idx) => (
-              <span
-                key={idx}
-                className="inline-flex items-center gap-1 px-3 py-1.5 bg-white/70 backdrop-blur-sm rounded-full text-xs md:text-sm text-gray-700 border border-gray-200/50 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-default"
-              >
-                {feature.icon}
-                {feature.label}
-              </span>
-            ))}
-          </div>
         </div>
 
         {/* 创建卡片 */}
@@ -572,7 +546,7 @@ export const Home: React.FC = () => {
                   onClick={() => setActiveTab(type)}
                   className={`flex-1 flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-6 py-2.5 md:py-3 rounded-lg font-medium transition-all text-sm md:text-base touch-manipulation ${
                     activeTab === type
-                      ? 'bg-gradient-to-r from-ookoo-500 to-ookoo-600 text-black shadow-ookoo'
+                      ? 'bg-gradient-to-r from-ookoo-500 to-ookoo-600 text-white shadow-ookoo'
                       : 'bg-white border border-gray-200 text-gray-700 hover:bg-ookoo-50 active:bg-ookoo-100'
                   }`}
                 >
@@ -667,7 +641,7 @@ export const Home: React.FC = () => {
           <div className="mb-6 md:mb-8 pt-4 border-t border-gray-100">
             <div className="flex items-center justify-between mb-3 md:mb-4">
               <div className="flex items-center gap-2">
-                <Palette size={18} className="text-orange-600 flex-shrink-0" />
+                <Palette size={18} className="text-ookoo-600 flex-shrink-0" />
                 <h3 className="text-base md:text-lg font-semibold text-gray-900">
                   选择风格模板
                 </h3>
@@ -693,11 +667,11 @@ export const Home: React.FC = () => {
                     }}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-banana-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-ookoo-500"></div>
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-ookoo-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-ookoo-500"></div>
                 </div>
               </label>
             </div>
-            
+
             {/* 根据模式显示不同的内容 */}
             {useTemplateStyle ? (
               <div className="space-y-3">
@@ -708,53 +682,56 @@ export const Home: React.FC = () => {
                   rows={3}
                   className="text-sm border-2 border-gray-200 focus:border-ookoo-400 transition-colors duration-200"
                 />
-                
+
                 {/* 预设风格按钮 */}
                 <div className="space-y-2">
                   <p className="text-xs font-medium text-gray-600">
                     快速选择预设风格：
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    {PRESET_STYLES.map((preset) => (
-                      <div key={preset.id} className="relative">
-                        <button
-                          type="button"
-                          onClick={() => setTemplateStyle(preset.description)}
-                          onMouseEnter={() => setHoveredPresetId(preset.id)}
-                          onMouseLeave={() => setHoveredPresetId(null)}
-                          className="px-3 py-1.5 text-xs font-medium rounded-full border-2 border-gray-200 hover:border-ookoo-400 hover:bg-ookoo-50 transition-all duration-200 hover:shadow-sm"
-                        >
-                          {preset.name}
-                        </button>
-                        
-                        {/* 悬停时显示预览图片 */}
-                        {hoveredPresetId === preset.id && preset.previewImage && (
-                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 z-50 animate-in fade-in slide-in-from-bottom-2 duration-200">
-                            <div className="bg-white rounded-lg shadow-2xl border-2 border-ookoo-400 p-2.5 w-72">
-                              <img
-                                src={preset.previewImage}
-                                alt={preset.name}
-                                className="w-full h-40 object-cover rounded"
-                                onError={(e) => {
-                                  // 如果图片加载失败，隐藏预览
-                                  e.currentTarget.style.display = 'none';
-                                }}
-                              />
-                              <p className="text-xs text-gray-600 mt-2 px-1 line-clamp-3">
-                                {preset.description}
-                              </p>
+                    {PRESET_STYLES.map((preset) => {
+                      const translatedPreset = getPresetStyleWithTranslation(preset, t);
+                      return (
+                        <div key={preset.id} className="relative">
+                          <button
+                            type="button"
+                            onClick={() => setTemplateStyle(translatedPreset.description)}
+                            onMouseEnter={() => setHoveredPresetId(preset.id)}
+                            onMouseLeave={() => setHoveredPresetId(null)}
+                            className="px-3 py-1.5 text-xs font-medium rounded-full border-2 border-gray-200 hover:border-ookoo-400 hover:bg-ookoo-50 transition-all duration-200 hover:shadow-sm"
+                          >
+                            {translatedPreset.name}
+                          </button>
+
+                          {/* 悬停时显示预览图片 */}
+                          {hoveredPresetId === preset.id && preset.previewImage && (
+                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 z-50 animate-in fade-in slide-in-from-bottom-2 duration-200">
+                              <div className="bg-white rounded-lg shadow-2xl border-2 border-ookoo-400 p-2.5 w-72">
+                                <img
+                                  src={preset.previewImage}
+                                  alt={translatedPreset.name}
+                                  className="w-full h-40 object-cover rounded"
+                                  onError={(e) => {
+                                    // 如果图片加载失败，隐藏预览
+                                    e.currentTarget.style.display = 'none';
+                                  }}
+                                />
+                                <p className="text-xs text-gray-600 mt-2 px-1 line-clamp-3">
+                                  {translatedPreset.description}
+                                </p>
+                              </div>
+                              {/* 小三角形指示器 */}
+                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1">
+                                <div className="w-3 h-3 bg-white border-r-2 border-b-2 border-ookoo-400 transform rotate-45"></div>
+                              </div>
                             </div>
-                            {/* 小三角形指示器 */}
-                            <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1">
-                              <div className="w-3 h-3 bg-white border-r-2 border-b-2 border-ookoo-400 transform rotate-45"></div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    ))}
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
-                
+
                 <p className="text-xs text-gray-500">
                   💡 提示：点击预设风格快速填充，或自定义描述风格、配色、布局等要求
                 </p>
@@ -764,12 +741,12 @@ export const Home: React.FC = () => {
                 onSelect={handleTemplateSelect}
                 selectedTemplateId={selectedTemplateId}
                 selectedPresetTemplateId={selectedPresetTemplateId}
-                showUpload={true} // 在主页上传的模板保存到用户模板库
+                showUpload={true}
                 projectId={currentProjectId}
+                showMaterialSelector={false}
               />
             )}
           </div>
-
         </Card>
       </main>
       <ToastContainer />

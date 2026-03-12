@@ -18,7 +18,6 @@ import {
   Settings,
 } from 'lucide-react';
 import { Button, Loading, Modal, Textarea, useToast, useConfirm, MaterialSelector, Markdown, ProjectSettingsModal } from '@/components/shared';
-import { MaterialGeneratorModal } from '@/components/shared/MaterialGeneratorModal';
 import { TemplateSelector, getTemplateFile } from '@/components/shared/TemplateSelector';
 import { listUserTemplates, type UserTemplate } from '@/api/endpoints';
 import { materialUrlToFile } from '@/components/shared/MaterialSelector';
@@ -82,8 +81,6 @@ export const SlidePreview: React.FC = () => {
   const isEditingTemplateStyle = useRef(false); // 跟踪用户是否正在编辑风格描述
   const lastProjectId = useRef<string | null>(null); // 跟踪上一次的项目ID
   const [isProjectSettingsOpen, setIsProjectSettingsOpen] = useState(false);
-  // 素材生成模态开关（模块本身可复用，这里只是示例入口）
-  const [isMaterialModalOpen, setIsMaterialModalOpen] = useState(false);
   // 素材选择器模态开关
   const [userTemplates, setUserTemplates] = useState<UserTemplate[]>([]);
   const [isMaterialSelectorOpen, setIsMaterialSelectorOpen] = useState(false);
@@ -705,7 +702,11 @@ export const SlidePreview: React.FC = () => {
             <span className="hidden sm:inline">返回</span>
           </Button>
           <div className="flex items-center gap-1.5 md:gap-2 min-w-0">
-            <span className="text-xl md:text-2xl">🎨</span>
+            <img
+              src="/ookoo.png"
+              alt="OoKoO Slides Logo"
+              className="h-7 md:h-8 w-auto object-contain"
+            />
             <span className="text-base md:text-xl font-bold truncate">OoKoO Slides</span>
           </div>
           <span className="text-gray-400 hidden md:inline">|</span>
@@ -729,15 +730,6 @@ export const SlidePreview: React.FC = () => {
             className="hidden lg:inline-flex"
           >
             <span className="hidden xl:inline">更换模板</span>
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            icon={<ImagePlus size={16} className="md:w-[18px] md:h-[18px]" />}
-            onClick={() => setIsMaterialModalOpen(true)}
-            className="hidden lg:inline-flex"
-          >
-            <span className="hidden xl:inline">素材生成</span>
           </Button>
           <Button
             variant="secondary"
@@ -965,15 +957,6 @@ export const SlidePreview: React.FC = () => {
                       onClick={() => setIsTemplateModalOpen(true)}
                       className="lg:hidden text-xs"
                       title="更换模板"
-                    />
-                    {/* 手机端：素材生成按钮 */}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      icon={<ImagePlus size={16} />}
-                      onClick={() => setIsMaterialModalOpen(true)}
-                      className="lg:hidden text-xs"
-                      title="素材生成"
                     />
                     {/* 手机端：刷新按钮 */}
                     <Button
@@ -1263,19 +1246,7 @@ export const SlidePreview: React.FC = () => {
 
             {/* 上传图片 */}
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-medium text-gray-700">上传图片：</label>
-                {projectId && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    icon={<ImagePlus size={16} />}
-                    onClick={() => setIsMaterialSelectorOpen(true)}
-                  >
-                    从素材库选择
-                  </Button>
-                )}
-              </div>
+              <label className="text-sm font-medium text-gray-700">上传图片：</label>
               <div className="flex flex-wrap gap-2">
                 {selectedContextImages.uploadedFiles.map((file, idx) => (
                   <div key={idx} className="relative group">
@@ -1349,6 +1320,7 @@ export const SlidePreview: React.FC = () => {
             selectedPresetTemplateId={selectedPresetTemplateId}
             showUpload={false} // 在预览页面上传的模板直接应用到项目，不上传到用户模板库
             projectId={projectId || null}
+            showMaterialSelector={false} // 不显示从素材库选择功能
           />
           {isUploadingTemplate && (
             <div className="text-center py-2 text-sm text-gray-500">
@@ -1369,11 +1341,6 @@ export const SlidePreview: React.FC = () => {
       {/* 素材生成模态组件（可复用模块，这里只是示例挂载） */}
       {projectId && (
         <>
-          <MaterialGeneratorModal
-            projectId={projectId}
-            isOpen={isMaterialModalOpen}
-            onClose={() => setIsMaterialModalOpen(false)}
-          />
           {/* 素材选择器 */}
           <MaterialSelector
             projectId={projectId}

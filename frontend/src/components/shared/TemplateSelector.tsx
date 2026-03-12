@@ -47,6 +47,7 @@ interface TemplateSelectorProps {
   selectedPresetTemplateId?: string | null;
   showUpload?: boolean;
   projectId?: string | null;
+  showMaterialSelector?: boolean;
 }
 
 export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
@@ -55,6 +56,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
   selectedPresetTemplateId,
   showUpload = true,
   projectId,
+  showMaterialSelector = true,
 }) => {
   const t = useT(templateI18n);
   const [userTemplates, setUserTemplates] = useState<UserTemplate[]>([]);
@@ -186,8 +188,8 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
                   onClick={() => handleSelectUserTemplate(template)}
                   className={`aspect-[4/3] rounded-lg border-2 cursor-pointer transition-all relative group ${
                     selectedTemplateId === template.template_id
-                      ? 'border-banana-500 ring-2 ring-banana-200'
-                      : 'border-gray-200 dark:border-border-primary hover:border-banana-300'
+                      ? 'border-ookoo-500 ring-4 ring-ookoo-300 shadow-ookoo shadow-lg scale-105'
+                      : 'border-gray-200 dark:border-border-primary hover:border-ookoo-400 hover:shadow-md'
                   }`}
                 >
                   <img
@@ -209,8 +211,8 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
                     </button>
                   )}
                   {selectedTemplateId === template.template_id && (
-                    <div className="absolute inset-0 bg-banana-500 bg-opacity-20 flex items-center justify-center pointer-events-none">
-                      <span className="text-white font-semibold text-sm">{t('template.templateSelected')}</span>
+                    <div className="absolute inset-0 bg-gradient-to-br from-ookoo-500/80 to-ookoo-600/70 flex items-center justify-center pointer-events-none rounded-lg">
+                      <span className="text-white font-bold text-base md:text-lg drop-shadow-md">{t('template.templateSelected')}</span>
                     </div>
                   )}
                 </div>
@@ -228,8 +230,8 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
                 onClick={() => template.preview && handleSelectPresetTemplate(template.id, template.preview)}
                 className={`aspect-[4/3] rounded-lg border-2 cursor-pointer transition-all bg-gray-100 dark:bg-background-secondary flex items-center justify-center relative ${
                   selectedPresetTemplateId === template.id
-                    ? 'border-banana-500 ring-2 ring-banana-200'
-                    : 'border-gray-200 dark:border-border-primary hover:border-banana-500'
+                    ? 'border-ookoo-500 ring-4 ring-ookoo-300 shadow-ookoo shadow-lg scale-105'
+                    : 'border-gray-200 dark:border-border-primary hover:border-ookoo-400 hover:shadow-md'
                 }`}
               >
                 {template.preview ? (
@@ -240,8 +242,8 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
                       className="absolute inset-0 w-full h-full object-cover"
                     />
                     {selectedPresetTemplateId === template.id && (
-                      <div className="absolute inset-0 bg-banana-500 bg-opacity-20 flex items-center justify-center pointer-events-none">
-                        <span className="text-white font-semibold text-sm">{t('template.templateSelected')}</span>
+                      <div className="absolute inset-0 bg-gradient-to-br from-ookoo-500/80 to-ookoo-600/70 flex items-center justify-center pointer-events-none rounded-lg">
+                        <span className="text-white font-bold text-base md:text-lg drop-shadow-md">{t('template.templateSelected')}</span>
                       </div>
                     )}
                   </>
@@ -281,7 +283,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
           )}
         </div>
 
-        {projectId && (
+        {projectId && showMaterialSelector && (
           <div className="mt-4">
             <h4 className="text-sm font-medium text-gray-700 dark:text-foreground-secondary mb-2">{t('template.selectFromMaterials')}</h4>
             <Button
@@ -297,7 +299,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
         )}
       </div>
       <ToastContainer />
-      {projectId && (
+      {projectId && showMaterialSelector && (
         <MaterialSelector
           projectId={projectId}
           isOpen={isMaterialSelectorOpen}

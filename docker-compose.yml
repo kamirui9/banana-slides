@@ -48,7 +48,7 @@ services:
         NPM_REGISTRY: ${NPM_REGISTRY:-}
     container_name: banana-slides-frontend
     ports:
-      - "${FRONTEND_PORT:-3000}:80"
+      - "${FRONTEND_PORT:-3333}:80"
     depends_on:
       - backend
     restart: unless-stopped

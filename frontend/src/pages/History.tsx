@@ -256,11 +256,15 @@ export const History: React.FC = () => {
       {/* 导航栏 */}
       <nav className="h-14 md:h-16 bg-white shadow-sm border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-3 md:px-4 h-full flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-ookoo-500 to-ookoo-600 rounded-lg flex items-center justify-center text-xl md:text-2xl">
-              🎨
+          <div className="flex items-center gap-3">
+            <div className="flex items-center">
+              <img
+                src="/ookoo.png"
+                alt="OoKoO Slides Logo"
+                className="h-8 md:h-10 w-auto object-contain"
+              />
             </div>
-            <span className="text-lg md:text-xl font-bold text-gray-900">OoKoO Slides</span>
+            <span className="text-lg md:text-xl font-bold bg-gradient-to-r from-ookoo-600 via-ookoo-500 to-ookoo-400 bg-clip-text text-transparent">OoKoO Slides</span>
           </div>
           <div className="flex items-center gap-2 md:gap-4">
             <Button
@@ -281,8 +285,8 @@ export const History: React.FC = () => {
       <main className="max-w-6xl mx-auto px-3 md:px-4 py-6 md:py-8">
         <div className="mb-6 md:mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1 md:mb-2">历史项目</h1>
-            <p className="text-sm md:text-base text-gray-600">查看和管理你的所有项目</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1 md:mb-2">我的PPT</h1>
+            <p className="text-sm md:text-base text-gray-600">查看和管理你所有的PPT</p>
           </div>
           {projects.length > 0 && selectedProjects.size > 0 && (
             <div className="flex items-center gap-3">

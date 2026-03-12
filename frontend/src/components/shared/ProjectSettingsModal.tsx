@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { X, FileText, Settings as SettingsIcon, Download, Sparkles, AlertTriangle, HelpCircle } from 'lucide-react';
+import { X, FileText, Settings as SettingsIcon, Download, Sparkles, AlertTriangle } from 'lucide-react';
 import { Button, Textarea } from '@/components/shared';
 import { useT } from '@/hooks/useT';
 import { Settings } from '@/pages/Settings';
 import type { ExportExtractorMethod, ExportInpaintMethod } from '@/types';
-import { ASPECT_RATIO_OPTIONS } from '@/config/aspectRatio';
 
 // ProjectSettings 组件自包含翻译
 const projectSettingsI18n = {
@@ -95,11 +94,6 @@ interface ProjectSettingsModalProps {
   onExportAllowPartialChange?: (value: boolean) => void;
   onSaveExportSettings?: () => void;
   isSavingExportSettings?: boolean;
-  aspectRatio?: string;
-  onAspectRatioChange?: (value: string) => void;
-  onSaveAspectRatio?: () => void;
-  isSavingAspectRatio?: boolean;
-  hasImages?: boolean;
 }
 
 type SettingsTab = 'project' | 'global' | 'export';
@@ -123,11 +117,6 @@ export const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({
   onExportAllowPartialChange,
   onSaveExportSettings,
   isSavingExportSettings = false,
-  aspectRatio = '16:9',
-  onAspectRatioChange,
-  onSaveAspectRatio,
-  isSavingAspectRatio = false,
-  hasImages = false,
 }) => {
   const t = useT(projectSettingsI18n);
   const [activeTab, setActiveTab] = useState<SettingsTab>('project');
@@ -166,7 +155,7 @@ export const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({
                 onClick={() => setActiveTab('project')}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                   activeTab === 'project'
-                    ? 'bg-banana-500 text-white shadow-md'
+                    ? 'bg-ookoo-500 text-white shadow-md'
                     : 'bg-white dark:bg-background-secondary text-gray-700 dark:text-foreground-secondary hover:bg-gray-100 dark:hover:bg-background-hover'
                 }`}
               >
@@ -177,7 +166,7 @@ export const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({
                 onClick={() => setActiveTab('export')}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                   activeTab === 'export'
-                    ? 'bg-banana-500 text-white shadow-md'
+                    ? 'bg-ookoo-500 text-white shadow-md'
                     : 'bg-white dark:bg-background-secondary text-gray-700 dark:text-foreground-secondary hover:bg-gray-100 dark:hover:bg-background-hover'
                 }`}
               >
@@ -188,7 +177,7 @@ export const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({
                 onClick={() => setActiveTab('global')}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                   activeTab === 'global'
-                    ? 'bg-banana-500 text-white shadow-md'
+                    ? 'bg-ookoo-500 text-white shadow-md'
                     : 'bg-white dark:bg-background-secondary text-gray-700 dark:text-foreground-secondary hover:bg-gray-100 dark:hover:bg-background-hover'
                 }`}
               >
@@ -206,54 +195,6 @@ export const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({
                   <p className="text-sm text-gray-600 dark:text-foreground-tertiary mb-6">
                     {t('projectSettings.projectConfigDesc')}
                   </p>
-                </div>
-
-                {/* 画面比例 */}
-                <div className="bg-gray-50 dark:bg-background-primary rounded-lg p-6 space-y-4">
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <h4 className="text-base font-semibold text-gray-900 dark:text-foreground-primary">{t('projectSettings.aspectRatio')}</h4>
-                      <div className="relative group">
-                        <button type="button" className="p-1 -m-1 rounded-full focus:outline-none focus:ring-2 focus:ring-banana-500">
-                          <HelpCircle size={16} className="text-gray-400 dark:text-foreground-tertiary cursor-help" />
-                        </button>
-                        <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-64 p-2 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all z-10 pointer-events-none">
-                          {t('projectSettings.aspectRatioHelp')}
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-sm text-gray-600 dark:text-foreground-tertiary">
-                      {hasImages ? t('projectSettings.aspectRatioLocked') : t('projectSettings.aspectRatioDesc')}
-                    </p>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {ASPECT_RATIO_OPTIONS.map((opt) => (
-                      <button
-                        key={opt.value}
-                        type="button"
-                        disabled={hasImages}
-                        onClick={() => onAspectRatioChange?.(opt.value)}
-                        className={`px-4 py-2 text-sm font-medium rounded-lg border-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
-                          aspectRatio === opt.value
-                            ? 'border-banana-500 bg-banana-50 dark:bg-background-secondary text-banana-700 dark:text-banana'
-                            : 'border-gray-200 dark:border-border-primary text-gray-700 dark:text-foreground-secondary hover:border-gray-300 dark:hover:border-gray-500 bg-white dark:bg-background-secondary'
-                        }`}
-                      >
-                        {opt.label}
-                      </button>
-                    ))}
-                  </div>
-                  {onSaveAspectRatio && !hasImages && (
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={onSaveAspectRatio}
-                      disabled={isSavingAspectRatio}
-                      className="w-full sm:w-auto"
-                    >
-                      {isSavingAspectRatio ? t('shared.saving') : t('common.save')}
-                    </Button>
-                  )}
                 </div>
 
                 <div className="bg-gray-50 dark:bg-background-primary rounded-lg p-6 space-y-4">

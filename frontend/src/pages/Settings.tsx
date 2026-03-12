@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Home, Key, Image, Zap, Save, RotateCcw, Globe, FileText } from 'lucide-react';
+import { Home, Key, Image, Zap, Save, RotateCcw, FileText } from 'lucide-react';
 import { Button, Input, Card, Loading, useToast, useConfirm } from '@/components/shared';
 import * as api from '@/api/endpoints';
-import type { OutputLanguage } from '@/api/endpoints';
-import { OUTPUT_LANGUAGE_OPTIONS } from '@/api/endpoints';
 import type { Settings as SettingsType } from '@/types';
 
 // 配置项类型定义
@@ -43,7 +41,6 @@ const initialFormData = {
   image_aspect_ratio: '16:9',
   max_description_workers: 5,
   max_image_workers: 8,
-  output_language: 'zh' as OutputLanguage,
 };
 
 // 配置驱动的表单区块定义
@@ -168,19 +165,6 @@ const settingsSections: SectionConfig[] = [
       },
     ],
   },
-  {
-    title: '输出语言设置',
-    icon: <Globe size={20} />,
-    fields: [
-      {
-        key: 'output_language',
-        label: '默认输出语言',
-        type: 'buttons',
-        description: 'AI 生成内容时使用的默认语言',
-        options: OUTPUT_LANGUAGE_OPTIONS,
-      },
-    ],
-  },
 ];
 
 // Settings 组件 - 纯嵌入模式（可复用）
@@ -216,7 +200,6 @@ export const Settings: React.FC = () => {
           mineru_api_base: response.data.mineru_api_base || '',
           mineru_token: '',
           image_caption_model: response.data.image_caption_model || '',
-          output_language: response.data.output_language || 'zh',
         });
       }
     } catch (error: any) {
@@ -329,9 +312,7 @@ export const Settings: React.FC = () => {
                 onClick={() => handleFieldChange(field.key, option.value)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                   value === option.value
-                    ? option.value === 'openai'
-                      ? 'bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-md'
-                      : 'bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-md'
+                    ? 'bg-gradient-to-r from-ookoo-500 to-ookoo-600 text-white shadow-md'
                     : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300'
                 }`}
               >
