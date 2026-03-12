@@ -3,11 +3,16 @@
 @tailwind utilities;
 
 :root {
-  /* 主色 - 黄色系 */
-  --banana-yellow: #FFD700;
-  --banana-yellow-light: #FFE44D;
-  --banana-yellow-dark: #FFC700;
-  --banana-yellow-pale: #FFF9E6;
+  /* 主色 - 松下蓝系 (Panasonic Blue) */
+  --ookoo-blue: #0059A3;
+  --ookoo-blue-light: #4DA8DE;
+  --ookoo-blue-dark: #003D6F;
+  --ookoo-blue-pale: #E8F4FC;
+
+  /* 辅助色 - 蓝色渐变 */
+  --ookoo-600: #0059A3;
+  --ookoo-500: #4DA8DE;
+  --ookoo-400: #A3D4F5;
 
   /* 中性色 - 黑白灰 */
   --black: #1A1A1A;
@@ -110,12 +115,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--banana-yellow);
+  background: var(--ookoo-blue);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--banana-yellow-dark);
+  background: var(--ookoo-blue-light);
 }
 
 /* 描述卡片极轻滚动条 */
