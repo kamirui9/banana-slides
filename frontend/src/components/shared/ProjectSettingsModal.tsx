@@ -162,7 +162,8 @@ export const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({
                 <FileText size={20} />
                 <span className="font-medium">{t('projectSettings.projectConfig')}</span>
               </button>
-              <button
+              {/* 隐藏导出设置菜单 */}
+              {false && <button
                 onClick={() => setActiveTab('export')}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                   activeTab === 'export'
@@ -172,7 +173,7 @@ export const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({
               >
                 <Download size={20} />
                 <span className="font-medium">{t('projectSettings.exportConfig')}</span>
-              </button>
+              </button>}
               <button
                 onClick={() => setActiveTab('global')}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${

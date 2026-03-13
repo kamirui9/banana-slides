@@ -804,12 +804,13 @@ export const SlidePreview: React.FC = () => {
                 >
                   导出为 PPTX
                 </button>
-                <button
+                {/* 隐藏导出可编辑 PPTX 选项 */}
+                {false && <button
                   onClick={() => handleExport('editable-pptx')}
                   className="w-full px-4 py-2 text-left hover:bg-gray-50 transition-colors text-sm"
                 >
                   导出可编辑 PPTX（不稳定测试版）
-                </button>
+                </button>}
                 <button
                   onClick={() => handleExport('pdf')}
                   className="w-full px-4 py-2 text-left hover:bg-gray-50 transition-colors text-sm"
