@@ -81,6 +81,10 @@ export const SlidePreview: React.FC = () => {
   const isEditingTemplateStyle = useRef(false); // 跟踪用户是否正在编辑风格描述
   const lastProjectId = useRef<string | null>(null); // 跟踪上一次的项目ID
   const [isProjectSettingsOpen, setIsProjectSettingsOpen] = useState(false);
+  // 导出设置状态
+  const [exportExtractorMethod, setExportExtractorMethod] = useState<'hybrid' | 'mineru'>('hybrid');
+  const [exportInpaintMethod, setExportInpaintMethod] = useState<'hybrid' | 'generative' | 'baidu'>('hybrid');
+  const [exportAllowPartial, setExportAllowPartial] = useState(false);
   // 素材选择器模态开关
   const [userTemplates, setUserTemplates] = useState<UserTemplate[]>([]);
   const [isMaterialSelectorOpen, setIsMaterialSelectorOpen] = useState(false);
@@ -602,6 +606,11 @@ export const SlidePreview: React.FC = () => {
       setIsSavingTemplateStyle(false);
     }
   }, [currentProject, projectId, templateStyle, syncProject, show]);
+
+  const handleSaveExportSettings = useCallback(async () => {
+    // 导出设置只是前端临时配置，不需要保存到后端
+    show({ message: '导出设置已更新', type: 'success' });
+  }, [show]);
 
   const handleTemplateSelect = async (templateFile: File | null, templateId?: string) => {
     if (!projectId) return;
@@ -1367,6 +1376,13 @@ export const SlidePreview: React.FC = () => {
             onSaveTemplateStyle={handleSaveTemplateStyle}
             isSavingRequirements={isSavingRequirements}
             isSavingTemplateStyle={isSavingTemplateStyle}
+            exportExtractorMethod={exportExtractorMethod}
+            onExportExtractorMethodChange={setExportExtractorMethod}
+            exportInpaintMethod={exportInpaintMethod}
+            onExportInpaintMethodChange={setExportInpaintMethod}
+            exportAllowPartial={exportAllowPartial}
+            onExportAllowPartialChange={setExportAllowPartial}
+            onSaveExportSettings={handleSaveExportSettings}
           />
         </>
       )}
