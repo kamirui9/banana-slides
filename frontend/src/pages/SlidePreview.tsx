@@ -128,17 +128,21 @@ export const SlidePreview: React.FC = () => {
     loadTemplates();
   }, [projectId, currentProject, syncProject]);
 
-  // 当项目加载后，初始化额外要求和风格描述
+  // 当项目加载后，初始化额外要求、风格描述和导出设置
   // 只在项目首次加载或项目ID变化时初始化，避免覆盖用户正在输入的内容
   useEffect(() => {
     if (currentProject) {
       // 检查是否是新项目
       const isNewProject = lastProjectId.current !== currentProject.id;
-      
+
       if (isNewProject) {
         // 新项目，初始化额外要求和风格描述
         setExtraRequirements(currentProject.extra_requirements || '');
         setTemplateStyle(currentProject.template_style || '');
+        // 初始化导出设置
+        setExportExtractorMethod(currentProject.export_extractor_method || 'hybrid');
+        setExportInpaintMethod(currentProject.export_inpaint_method || 'hybrid');
+        setExportAllowPartial(currentProject.export_allow_partial || false);
         lastProjectId.current = currentProject.id || null;
         isEditingRequirements.current = false;
         isEditingTemplateStyle.current = false;
@@ -150,10 +154,14 @@ export const SlidePreview: React.FC = () => {
         if (!isEditingTemplateStyle.current) {
           setTemplateStyle(currentProject.template_style || '');
         }
+        // 导出设置也从服务器同步回来
+        setExportExtractorMethod(currentProject.export_extractor_method || 'hybrid');
+        setExportInpaintMethod(currentProject.export_inpaint_method || 'hybrid');
+        setExportAllowPartial(currentProject.export_allow_partial || false);
       }
       // 如果用户正在编辑，则不更新本地状态
     }
-  }, [currentProject?.id, currentProject?.extra_requirements, currentProject?.template_style]);
+  }, [currentProject?.id, currentProject?.extra_requirements, currentProject?.template_style, currentProject?.export_extractor_method, currentProject?.export_inpaint_method, currentProject?.export_allow_partial]);
 
   // 加载当前页面的历史版本
   useEffect(() => {
@@ -608,9 +616,26 @@ export const SlidePreview: React.FC = () => {
   }, [currentProject, projectId, templateStyle, syncProject, show]);
 
   const handleSaveExportSettings = useCallback(async () => {
-    // 导出设置只是前端临时配置，不需要保存到后端
-    show({ message: '导出设置已更新', type: 'success' });
-  }, [show]);
+    if (!projectId) return;
+
+    try {
+      // 调用API保存导出设置到后端数据库
+      await updateProject(projectId, {
+        export_extractor_method: exportExtractorMethod,
+        export_inpaint_method: exportInpaintMethod,
+        export_allow_partial: exportAllowPartial,
+      });
+      // 更新本地项目状态
+      await syncProject(projectId);
+      show({ message: '导出设置已更新', type: 'success' });
+    } catch (error: any) {
+      console.error('保存导出设置失败:', error);
+      show({
+        message: `保存导出设置失败: ${error.message || '未知错误'}`,
+        type: 'error'
+      });
+    }
+  }, [projectId, exportExtractorMethod, exportInpaintMethod, exportAllowPartial, syncProject, show]);
 
   const handleTemplateSelect = async (templateFile: File | null, templateId?: string) => {
     if (!projectId) return;
